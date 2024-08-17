@@ -143,5 +143,34 @@ from book_store.models import Book,Author
 
 Author.objects.get(last_name="Rowling").books.all()
 # <QuerySet [<Book: Title: Harry Potter1,  Author: first_name: J.K> , last_name:Rowling Bestseller: True>, <Book: Title: Harry Potter2,  Author: first_name: J.K> , last_name:Rowling Bestseller: False>, <Book: Title: Harry Potter3,  Author: first_name: J.K> , last_name:Rowling Bestseller: True>]>
+
+# chaining model relationship
+
+angela = Author(first_name="Angela",last_name="Yu")
+p1 = Book(title="100 days of Python",rating=9,author=angela,is_bestselling=True)
+Book.save(p1)
+Address.save(street="Random street 6",postal_code="Random postal code 6",city="London",author =angela)
+p1.author.address
+#<Address: ('Random street 6', 'Random postal code 6', 'London')>
+
+
+```
+
+## Many To Many Relationship Association
+
+```py
+from book_store.models import Book,Author,Address,Country
+usa = Country(name="United States of America",code="USA")
+usa.save()
+springboot = Book.objects.get(title="SpringBoot : Spring Masterclass")
+springboot.published_countries.add(usa)
+#<QuerySet [<Country: United Kingdom(UK)>, <Country: United States of America(USA)>]>
+
+
+usa.book_set.all()
+#<QuerySet [<Book: Title: SpringBoot : Spring Masterclass,  Author: first_name: Chad , last_name:Darby Bestseller: False>]>
+Country.objects.get(code="GER").book_set.all()
+# <QuerySet [<Book: Title: Django : The practical guide,  Author: first_name: Max , last_name:Schwarz Bestseller: True>, <Book: Title: Flask : Create API,  Author: first_name: Jose , last_name:Portilla Bestseller: False>, <Book: Title: Java : Java17 Masterclass,  Author: first_name: Tim , last_name:Bulchalka Bestseller: True>]>
+
 ```
 
